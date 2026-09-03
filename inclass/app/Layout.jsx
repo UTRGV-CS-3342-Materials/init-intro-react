@@ -1,6 +1,6 @@
 // The entire document is a component
 // `children` is a specially named prop that maps to the tag body (rather than the tag attributes)
-export function Layout({ children, title }) {
+export function Layout({ title, children }) {
 	return (
 		<html>
 			<head>

@@ -1,7 +1,7 @@
 import { Layout } from './Layout.jsx';
 
-// One row of the table is worth its own component: it is a function,
-// so it can be named, moved, and tested on its own.
+// separate component for each item row
+// things that are repeated are good candidates to be sub-components
 function ItemRow({ item }) {
 	return (
 		<>
@@ -40,9 +40,9 @@ export function Items({ items }) {
 						</tr>
 					</thead>
 					<tbody>
-						{/* the EJS for-loop becomes a map: a function applied to every row.
-						    `key` tells React which output belongs to which input. */}
+						{/* map over items to generate a subtree for each */}
 						{items.map((item) => (
+							{/* must provide unique key for any repeated elements */}
 							<ItemRow key={item.id} item={item} />
 						))}
 					</tbody>
