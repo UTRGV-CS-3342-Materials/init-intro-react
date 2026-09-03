@@ -3,8 +3,9 @@ import Database from 'better-sqlite3';
 
 /*-------------------------------------------------------
 - Exercise
-- loop to display all items
-- create and use ItemRow sub-component in Items.jsx (pass in item)
+- create ItemView component in ItemView.jsx
+- create Review sub-component in ItemView.jsx
+- update POST handler for adding reviews
 -------------------------------------------------------*/
 
 import { Hello } from './app/Hello.jsx';

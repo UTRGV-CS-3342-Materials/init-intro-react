@@ -34,8 +34,7 @@ function validateReview(values) {
 
 app.get('/items', (req, res) => {
 	const items = db.prepare('SELECT * FROM item').all();
-	send(res, <Hello />);
-	// send(res, <Items items={items} />);
+	send(res, <Items items={items} />);
 });
 
 app.get('/item_view/:item_id', (req, res) => {

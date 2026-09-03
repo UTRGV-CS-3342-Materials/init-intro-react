@@ -1,6 +1,6 @@
-// The whole document is a component. <html>, <head> and all.
-// `children` is just another prop -- the one JSX fills in from the tag body.
-export function Layout({ title, children }) {
+// The entire document is a component
+// `children` is a specially named prop that maps to the tag body (rather than the tag attributes)
+export function Layout({ children, title }) {
 	return (
 		<html>
 			<head>

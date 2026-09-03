@@ -2,9 +2,15 @@ import express from 'express';
 import Database from 'better-sqlite3';
 
 /*-------------------------------------------------------
+- Example
+- children props
+-------------------------------------------------------*/
+
+/*-------------------------------------------------------
 - Exercise
-- loop to display all items
-- create and use ItemRow sub-component in Items.jsx (pass in item)
+- create Layout component in Layout.jsx for <html>, <head>, <body> (shared by all pages)
+- use children prop to display any components inside Layout
+- "wrap" Layout around the content in Item
 -------------------------------------------------------*/
 
 import { Hello } from './app/Hello.jsx';

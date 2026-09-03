@@ -2,16 +2,18 @@ import express from 'express';
 import Database from 'better-sqlite3';
 
 /*-------------------------------------------------------
+- Example
 - import react rendering system
 - create Hello component (jsx)
 - render Hello component in items route
-- 
+-------------------------------------------------------*/
+
+/*-------------------------------------------------------
+- Example
 - create Item component
 - pass in items data (props)
-- display the first item (using html from mockup)
+- display the first item in the data (using html from mockup)
 - loop over data in JSX (map)
-- 
-- create Item 
 -------------------------------------------------------*/
 
 const PORT = 8080;
