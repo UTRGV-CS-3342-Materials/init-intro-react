@@ -153,21 +153,24 @@ async function main() {
     ? fs.readFileSync(versionFile, "utf8").trim()
     : "start";
 
-  // 1. Show what's changed here and ask before saving it.
+  // 1. Show what's changed here and ask before saving it. Deliberately
+  // checks status without staging first — `git status --porcelain` already
+  // reports untracked/unstaged changes, and staging before the prompt would
+  // leave things staged even on a decline.
   console.log("Checking your current work...");
-  run("git", ["add", "-A", "."]);
   const status = runCapture("git", ["status", "--porcelain", "--", "."]);
   let savedWork = false;
   if (status.trim()) {
-    console.log("You have unsaved work:");
+    console.log("You have uncommitted work that would be discarded:");
     console.log(status);
     const ok = await confirm(
-      `Save this as "student work: from ${workingFrom}" and load ${target}?`,
+      `Commit this as "student work: from ${workingFrom}" and load ${target}?`,
     );
     if (!ok) {
       console.log("Stopped — nothing changed. Your edits are still here.");
       process.exit(1);
     }
+    run("git", ["add", "-A", "."]);
     run("git", ["commit", "-m", `student work: from ${workingFrom}`]);
     savedWork = true;
   } else {
