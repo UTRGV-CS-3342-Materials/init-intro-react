@@ -1,30 +1,26 @@
 import express from 'express';
-mport sqlite3 from 'sqlite3';
-import { open } from 'sqlite';
+import Database from 'better-sqlite3';
 
 const PORT = 8080;
 
-const db = await open({
-	filename: 'shopping.sqlite',
-	driver: sqlite3.Database,
-});
+const db = new Database('shopping.sqlite');
 
 const app = express();
 app.use(express.static('static'));
 app.use(express.urlencoded({ extended: false }));
 
-app.get('/items', async (req, res) => {
-	const items = await db.all('SELECT * FROM item');
+app.get('/items', (req, res) => {
+	const items = db.prepare('SELECT * FROM item').all();
 
 	res.send("Display all items here.");
 });
 
-app.get('/item_view/:item_id', async (req, res) => {
+app.get('/item_view/:item_id', (req, res) => {
 	const itemId = parseInt(req.params.item_id);
-	const item = await db.get('SELECT * FROM item WHERE id = ?', itemId);
+	const item = db.prepare('SELECT * FROM item WHERE id = ?').get(itemId);
 	if (!item) return res.status(404).send('No such item.');
 
-	const reviews = await db.all('SELECT * FROM review WHERE item_id = ?', itemId);
+	const reviews = db.prepare('SELECT * FROM review WHERE item_id = ?').all(itemId);
 
 	res.send(`Display item ${itemId} and its reviews here.`);
 });

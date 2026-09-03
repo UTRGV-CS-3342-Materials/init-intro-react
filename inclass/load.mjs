@@ -22,9 +22,12 @@
 //      into .checkpoint-version, and commits *that* as its own "checkpoint:
 //      Vx" commit (no prompt — it's just bookkeeping, not a student
 //      decision), skipped if it wouldn't change anything.
-//   3. Runs `npm install` only if the checkpoint's package.json actually
-//      differs from the one you had — so a plain load stays instant.
-//   4. Pushes once at the end, if either commit above happened.
+//   3. If the checkpoint's package.json differs from the one you had, prints
+//      a note to run `npm install` yourself — it doesn't run it for you, so
+//      a plain load stays instant and nothing runs behind your back.
+//
+// Pushing is NOT automatic (see the commented-out block near the end) —
+// re-enable it there if you want it back.
 //
 // Committing the checkpoint load itself (step 2) is what makes step 1's
 // "did the student actually edit anything" check meaningful on the *next*
@@ -191,34 +194,35 @@ async function main() {
   fs.cpSync(srcDir, dir, { recursive: true });
   fs.writeFileSync(versionFile, `${target}\n`);
 
-  // 3. Reinstall only if package.json changed, so node_modules survives a
-  // plain load untouched.
+  // Note whether package.json changed — we don't install for them (see the
+  // note printed at the end), just flag it.
   const newPkg = fs.existsSync(pkgPath) ? fs.readFileSync(pkgPath, "utf8") : null;
-  if (newPkg !== oldPkg) {
-    console.log("package.json changed — running npm install...");
-    run("npm", ["install"]);
-  } else {
-    console.log("package.json unchanged — keeping existing node_modules.");
-  }
+  const pkgChanged = newPkg !== oldPkg;
 
   // Commit the checkpoint load itself (no prompt — this is bookkeeping, not
   // a student decision), so next time this script runs, step 1 only sees a
   // diff if real student edits happened since this point.
   console.log(`Recording checkpoint ${target}...`);
-  const loadedCheckpoint = commitIfDirty(`checkpoint: ${target}`);
+  commitIfDirty(`checkpoint: ${target}`);
 
-  // 4. One push covers whichever of the two commits above happened.
-  if (savedWork || loadedCheckpoint) {
-    try {
-      run("git", ["push"]);
-    } catch {
-      console.log(
-        "⚠ Push failed (offline? no upstream?) — your work is committed locally, continuing.",
-      );
-    }
-  }
+  // Not auto-pushing — the two commits above stay local until the student
+  // (or instructor) pushes deliberately. Uncomment to bring it back:
+  // if (savedWork || loadedCheckpoint) {
+  //   try {
+  //     run("git", ["push"]);
+  //   } catch {
+  //     console.log(
+  //       "⚠ Push failed (offline? no upstream?) — your work is committed locally, continuing.",
+  //     );
+  //   }
+  // }
 
   console.log(`✓ Loaded ${target}`);
+
+  if (pkgChanged) {
+    console.log();
+    console.log("package.json has changed — run npm install to update packages.");
+  }
 }
 
 main();
