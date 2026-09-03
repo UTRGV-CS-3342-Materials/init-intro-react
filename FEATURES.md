@@ -9,7 +9,7 @@ Update with every commit. Put a status (in-progress) or (complete) at the end of
 # 1.4 Layout component
 # 1.5 Detail component
 # 1.6 Post handler
-# 1.5 Input validation
+# 1.7 Input validation
 
 # Your site
 # 2.1 Server route retrieving database data

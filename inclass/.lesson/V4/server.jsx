@@ -1,8 +1,10 @@
 import express from 'express';
+import { renderToString } from 'react-dom/server';
 import Database from 'better-sqlite3';
 
 /*-------------------------------------------------------
 - Exercise
+- update POST handler for adding reviews
 - show optional errors (list), default values (author, content) in ItemView
 -------------------------------------------------------*/
 
@@ -45,12 +47,8 @@ app.get('/item_view/:item_id', (req, res) => {
 
 app.post('/item_view/:item_id', (req, res) => {
 	const itemId = parseInt(req.params.item_id);
-	const item = db.prepare('SELECT * FROM item WHERE id = ?').get(itemId);
-	if (!item) return res.status(404).send('No such item.');
 
-	db.prepare(
-		'INSERT INTO review (item_id, author, content) VALUES (?, ?, ?)'
-	).run(itemId, values.author.trim(), values.content.trim());
+	
 
 	// send the browswer back to the view route
 	res.redirect(`/item_view/${itemId}`);

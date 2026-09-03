@@ -40,9 +40,9 @@ export function Items({ items }) {
 						</tr>
 					</thead>
 					<tbody>
-						{/* map over items to generate a subtree for each */}
+						{/* map over items to generate a subtree for each
+							must provide a unique key attribute for any repeated elements */}
 						{items.map((item) => (
-							{/* must provide unique key for any repeated elements */}
 							<ItemRow key={item.id} item={item} />
 						))}
 					</tbody>

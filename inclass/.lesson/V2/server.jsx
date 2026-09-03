@@ -1,4 +1,5 @@
 import express from 'express';
+import { renderToString } from 'react-dom/server';
 import Database from 'better-sqlite3';
 
 /*-------------------------------------------------------
@@ -13,7 +14,7 @@ import Database from 'better-sqlite3';
 - "wrap" Layout around the content in Item
 -------------------------------------------------------*/
 
-import { Hello } from './app/Hello.jsx';
+import { Items } from './app/Items.jsx';
 
 const PORT = 8080;
 
@@ -29,8 +30,7 @@ function send(res, element) {
 
 app.get('/items', (req, res) => {
 	const items = db.prepare('SELECT * FROM item').all();
-
-	send(res, <Hello />);
+	send(res, <Items items={items} />);
 });
 
 app.get('/item_view/:item_id', (req, res) => {
@@ -41,8 +41,8 @@ app.get('/item_view/:item_id', (req, res) => {
 
 	const reviews = db.prepare('SELECT * FROM review WHERE item_id = ?').all(itemId);
 
-	send(res, <ItemView item={item} reviews={reviews} />);
-	
+	res.send(`Display item ${itemId} and its reviews here.`);
 });
+
 
 app.listen(PORT, () => console.log(`http://localhost:${PORT}/items`));
