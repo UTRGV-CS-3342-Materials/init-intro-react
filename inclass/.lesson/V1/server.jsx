@@ -1,18 +1,7 @@
 import express from 'express';
 import Database from 'better-sqlite3';
 
-/*-------------------------------------------------------
-- import react rendering system
-- create Hello component (jsx)
-- render Hello component in items route
-- 
-- create Item component
-- pass in items data (props)
-- display the first item (using html from mockup)
-- loop over data in JSX (map)
-- 
-- create Item 
--------------------------------------------------------*/
+import { Hello } from './app/Hello.jsx';
 
 const PORT = 8080;
 
@@ -22,10 +11,14 @@ const app = express();
 app.use(express.static('static'));
 app.use(express.urlencoded({ extended: false }));
 
+function send(res, element) {
+	res.send('<!DOCTYPE html>' + renderToString(element));
+}
+
 app.get('/items', (req, res) => {
 	const items = db.prepare('SELECT * FROM item').all();
 
-	res.send("Display all items here.");
+	send(res, <Hello />);
 });
 
 app.get('/item_view/:item_id', (req, res) => {
@@ -36,7 +29,8 @@ app.get('/item_view/:item_id', (req, res) => {
 
 	const reviews = db.prepare('SELECT * FROM review WHERE item_id = ?').all(itemId);
 
-	res.send(`Display item ${itemId} and its reviews here.`);
+	send(res, <ItemView item={item} reviews={reviews} />);
+	
 });
 
 app.listen(PORT, () => console.log(`http://localhost:${PORT}/items`));
